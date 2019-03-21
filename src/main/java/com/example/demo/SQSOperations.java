@@ -98,13 +98,13 @@ public class SQSOperations {
         }
         return messages;
     }
-	public static Message receiveMessage(Integer waitTime, Integer visibilityTimeout) {
+	public static Message receiveMessage() {
 		AmazonSQS sqs = getSQSClient();
 		String queueUrl = getQueueUrl();
 		ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(queueUrl);
 		receiveMessageRequest.setMaxNumberOfMessages(1);
-		receiveMessageRequest.setWaitTimeSeconds(waitTime);
-		receiveMessageRequest.setVisibilityTimeout(visibilityTimeout);
+		//receiveMessageRequest.setWaitTimeSeconds(waitTime);
+		//receiveMessageRequest.setVisibilityTimeout(visibilityTimeout);
 		ReceiveMessageResult receiveMessageResult = sqs.receiveMessage(receiveMessageRequest);
 		List<Message> messageList = receiveMessageResult.getMessages();
 		if (messageList.isEmpty()) {

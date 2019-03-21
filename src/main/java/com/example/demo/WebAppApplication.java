@@ -5,8 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
+import static com.example.demo.AutoScaler.ScaleInOut;
+import static com.example.demo.Configuration.LOAD_BALANCER_TIMEOUT;
 import static com.example.demo.Configuration.RASBERRY_PIE_URL;
 import static com.example.demo.FileOperations.deleteTempFile;
 import static com.example.demo.FileOperations.downloadFile;
@@ -20,6 +22,7 @@ public class WebAppApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(WebAppApplication.class, args);
+        runLoadBalancer();
     }
 
     @RequestMapping("/hello")
@@ -50,4 +53,16 @@ public class WebAppApplication {
         }
         return("Successfully Queued \n");
     }
+    public static void runLoadBalancer(){
+        int i = 1;
+        while(i>0){
+            ScaleInOut();
+            try {
+                TimeUnit.SECONDS.sleep(LOAD_BALANCER_TIMEOUT);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
