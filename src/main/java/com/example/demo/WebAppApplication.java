@@ -12,6 +12,7 @@ import static com.example.demo.FileOperations.deleteTempFile;
 import static com.example.demo.FileOperations.downloadFile;
 import static com.example.demo.S3Operations.putFileInS3;
 import static com.example.demo.SQSOperations.*;
+import static com.example.demo.SQSOperations.sendMessageToSQSQueue;
 
 @SpringBootApplication
 @RestController
@@ -25,15 +26,28 @@ public class WebAppApplication {
     public String sayHello() {
         try {
             String fileName = downloadFile(RASBERRY_PIE_URL,".");
-            putFileInS3(fileName);
-            deleteTempFile(fileName);
-            String queueUrl = getQueueUrl();
-            sendMessageToSQSQueue(queueUrl,fileName);
+            int m = putFileInS3(fileName);
+            if(m == 1){
+                deleteTempFile(fileName);
+                String queueUrl = getQueueUrl();
+                sendMessageToSQSQueue(queueUrl,fileName);
+                System.out.println("Queue Size is"+getSQSQueueSize());
+            }else{
+                System.out.println("New type of error:"+m);
+            }
+            //TODO
+            //Query S3 with filename to return value
 
-        } catch (IOException e) {
+           /* while(getSQSQueueSize()>0){
+                System.out.println("Queue Size is"+getSQSQueueSize());
+                getMessagesFromSQSQueue();
+            }*/
+
+
+        } catch (Exception e) {
             e.printStackTrace();
             return("Failed");
         }
-        return("Successfully Queued");
+        return("Successfully Queued \n");
     }
 }

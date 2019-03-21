@@ -41,8 +41,7 @@ public class FileOperations {
                 // extracts file name from header field
                 int index = disposition.indexOf("filename=");
                 if (index > 0) {
-                    fileName = disposition.substring(index + 10,
-                            disposition.length() - 1);
+                    fileName = disposition.replaceFirst("(?i)^.*filename=\"?([^\"]+)\"?.*$", "$1");
                 }
             } else {
                 // extracts file name from URL
