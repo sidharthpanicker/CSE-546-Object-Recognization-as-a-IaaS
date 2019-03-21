@@ -41,7 +41,7 @@ public class SQSOperations {
         try {
             AmazonSQS sqs = getSQSClient();
             String queue_url = sqs.getQueueUrl(QUEUE_NAME).getQueueUrl();
-            System.out.println("Queue Url is" + queue_url);
+            //System.out.println("Queue Url is" + queue_url);
             return queue_url;
         } catch (AmazonSQSException e) {
             return createSQSQueue();
@@ -58,7 +58,7 @@ public class SQSOperations {
         attributes.put("FifoQueue", "true");
 
         // If the user doesn't provide a MessageDeduplicationId, generate a MessageDeduplicationId based on the content.
-        //attributes.put("ContentBasedDeduplication", "true");
+        attributes.put("ContentBasedDeduplication", "true");
 
         // The FIFO queue name must end with the .fifo suffix
         final CreateQueueRequest createQueueRequest = new CreateQueueRequest(QUEUE_NAME)

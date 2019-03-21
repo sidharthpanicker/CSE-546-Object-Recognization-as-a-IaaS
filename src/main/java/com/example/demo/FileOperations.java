@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Random;
+
 
 public class FileOperations {
     private static final int BUFFER_SIZE = 4096;
@@ -56,7 +58,9 @@ public class FileOperations {
 
             // opens input stream from the HTTP connection
             InputStream inputStream = httpConn.getInputStream();
-
+            String[] split = fileName.split("\\.");
+            System.out.println(split.length);
+            fileName = split[0]+ "_"+ new Random().nextInt(1000)+ "."+split[1];
             String saveFilePath = saveDir + File.separator + fileName;
 
             // opens an output stream to save into file

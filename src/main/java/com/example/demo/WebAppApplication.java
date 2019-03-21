@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.concurrent.TimeUnit;
 
 import static com.example.demo.AutoScaler.ScaleInOut;
+import static com.example.demo.Common.getEC2USerData;
 import static com.example.demo.Configuration.LOAD_BALANCER_TIMEOUT;
 import static com.example.demo.Configuration.RASBERRY_PIE_URL;
 import static com.example.demo.FileOperations.deleteTempFile;
@@ -22,7 +23,9 @@ public class WebAppApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(WebAppApplication.class, args);
-        runLoadBalancer();
+        //runLoadBalancer();
+        //getEC2USerData();
+
     }
 
     @RequestMapping("/hello")

@@ -42,6 +42,7 @@ public class EC2Operations{
 		tagSpecifications.add(tagSpecification);
 		RunInstancesRequest rir = new RunInstancesRequest(imageId, mincount, maxcount);
 		rir.setInstanceType("t2.micro");
+		rir.setUserData(Common.getEC2USerData());
 		rir.setTagSpecifications(tagSpecifications);
 		RunInstancesResult result = null;
 		try {
