@@ -3,7 +3,7 @@ package com.example.demo;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.model.*;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,9 +11,7 @@ import java.util.Map;
 import static com.example.demo.AWSClientGenerator.getSQSClient;
 import static com.example.demo.Configuration.QUEUE_NAME;
 
-
 public class SQSOperations {
-    private static final String QUEUELENGTHATTR = "ApproximateNumberOfMessages";
 
     public static void sendMessageToSQSQueue(String queueUrl,String videoName){
         AmazonSQS sqs = getSQSClient();
@@ -43,7 +41,7 @@ public class SQSOperations {
         try {
             AmazonSQS sqs = getSQSClient();
             String queue_url = sqs.getQueueUrl(QUEUE_NAME).getQueueUrl();
-            //System.out.println("Queue Url is" + queue_url);
+            System.out.println("Queue Url is" + queue_url);
             return queue_url;
         } catch (AmazonSQSException e) {
             return createSQSQueue();
@@ -60,7 +58,7 @@ public class SQSOperations {
         attributes.put("FifoQueue", "true");
 
         // If the user doesn't provide a MessageDeduplicationId, generate a MessageDeduplicationId based on the content.
-        attributes.put("ContentBasedDeduplication", "true");
+        //attributes.put("ContentBasedDeduplication", "true");
 
         // The FIFO queue name must end with the .fifo suffix
         final CreateQueueRequest createQueueRequest = new CreateQueueRequest(QUEUE_NAME)
@@ -74,6 +72,7 @@ public class SQSOperations {
         System.out.println("Receiving messages from MyQueue.\n");
         final ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(getQueueUrl());
         final List<Message> messages = sqs.receiveMessage(receiveMessageRequest).getMessages();
+        System.out.println("Size is:"+messages.size());
         for (final Message message : messages) {
             System.out.println("Message");
             System.out.println("  MessageId:     " + message.getMessageId());
@@ -85,20 +84,62 @@ public class SQSOperations {
                 System.out.println("  Name:  " + entry.getKey());
                 System.out.println("  Value: " + entry.getValue());
             }
-            //sqs.deleteMessage(getQueueUrl(), message.getReceiptHandle());
         }
-
         System.out.println();
     }
 
     public static int getSQSQueueSize(){
         int messages = 0;
         AmazonSQS sqs = getSQSClient();
-        GetQueueAttributesResult result = sqs.getQueueAttributes(getQueueUrl(), Arrays.asList(QUEUELENGTHATTR));
-        Map<String, String> attrs = result.getAttributes();
-        if (attrs.containsKey(QUEUELENGTHATTR)) {
-            messages =Integer.parseInt(attrs.get(QUEUELENGTHATTR));
+        GetQueueAttributesRequest request = new GetQueueAttributesRequest(getQueueUrl());
+        GetQueueAttributesResult attrsResult = sqs.getQueueAttributes(request);
+        for (Map.Entry<String, String> attr : attrsResult.getAttributes().entrySet()) {
+            System.out.println(attr.getKey() + attr.getValue());
         }
         return messages;
     }
+	public static Message receiveMessage(Integer waitTime, Integer visibilityTimeout) {
+		AmazonSQS sqs = getSQSClient();
+		String queueUrl = getQueueUrl();
+		ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(queueUrl);
+		receiveMessageRequest.setMaxNumberOfMessages(1);
+		receiveMessageRequest.setWaitTimeSeconds(waitTime);
+		receiveMessageRequest.setVisibilityTimeout(visibilityTimeout);
+		ReceiveMessageResult receiveMessageResult = sqs.receiveMessage(receiveMessageRequest);
+		List<Message> messageList = receiveMessageResult.getMessages();
+		if (messageList.isEmpty()) {
+			return null;
+		}
+		return messageList.get(0);
+	}
+	
+	public static void deleteMessage(Message message) {
+		AmazonSQS sqs = getSQSClient();
+		String queueUrl = getQueueUrl();
+		String messageReceiptHandle = message.getReceiptHandle();
+		DeleteMessageRequest deleteMessageRequest = new DeleteMessageRequest(queueUrl, messageReceiptHandle);
+		sqs.deleteMessage(deleteMessageRequest);
+	}
+    public static List<Message> getMessages()
+    {
+    	
+    	AmazonSQS sqs = getSQSClient();
+    	String queueUrl = getQueueUrl();
+    	ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(queueUrl);
+    	List<Message> messages = sqs.receiveMessage(receiveMessageRequest).getMessages();
+    	return messages;
+    }
+    
+    
+    public static int getApproximateNumberOfMsgs() {
+    	AmazonSQS sqs = getSQSClient();
+    	String queueUrl = getQueueUrl();
+    	List<String> attributeNames = new ArrayList<String>();
+    	attributeNames.add("ApproximateNumberOfMessages");
+    	GetQueueAttributesRequest getQueueAttributesRequest = new GetQueueAttributesRequest(queueUrl, attributeNames);
+    	Map map = sqs.getQueueAttributes(getQueueAttributesRequest).getAttributes();
+    	String numberOfMessagesString = (String) map.get("ApproximateNumberOfMessages");
+    	Integer numberOfMessages = Integer.valueOf(numberOfMessagesString);
+    	return numberOfMessages;
+    }  
 }
