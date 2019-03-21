@@ -102,7 +102,6 @@ public class EC2Operations{
 		DescribeInstanceStatusResult describeInstances = ec2.describeInstanceStatus(describeRequest);
 		List<InstanceStatus> instanceStatusList = describeInstances.getInstanceStatuses();
 		List<String> runningInstanceIds = new ArrayList<String>();
-		Integer countOfRunningInstances = 0;
 		for (InstanceStatus instanceStatus : instanceStatusList) {
 			InstanceState instanceState = instanceStatus.getInstanceState();
 			if (instanceState.getName().equals(InstanceStateName.Running.toString())) {

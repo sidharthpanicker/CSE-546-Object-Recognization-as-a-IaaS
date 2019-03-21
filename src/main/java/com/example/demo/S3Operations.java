@@ -1,8 +1,14 @@
 package com.example.demo;
 
+import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
+import com.amazonaws.services.s3.model.GetObjectRequest;
+import com.amazonaws.services.s3.model.ListObjectsRequest;
+import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.PutObjectResult;
+import static com.example.demo.Configuration.BUCKET_NAME;
+import static com.example.demo.AWSClientGenerator.getS3Client;
 
 import java.io.File;
 
@@ -38,7 +44,19 @@ public class S3Operations {
         }
         return result;
     }
-
+    public static boolean existsInS3(String instanceId)
+    {
+    	boolean result = false;
+    	AmazonS3 s3client = getS3Client();
+    	S3Object fullObject = null;
+    	fullObject = s3client.getObject(new GetObjectRequest(BUCKET_NAME, instanceId));
+    	if (fullObject != null)
+    	{
+    		result = true;
+    	}
+    	return result;
+    }
+    
     /*public static getResultForInputFromS3(String){
 
     }*/
