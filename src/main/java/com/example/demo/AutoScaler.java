@@ -7,16 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.model.Message;
 
 import static com.example.demo.EC2Operations.getIdsOfRunningInstances;
 import static com.example.demo.EC2Operations.CreateInstance;
 import static com.example.demo.EC2Operations.startInstance;
 import static com.example.demo.EC2Operations.getIdsOfStoppedInstances;
-import static com.example.demo.EC2Operations.CreateOrStartInstance;
 import static com.example.demo.EC2Operations.stopInstance;
-import static com.example.demo.AWSClientGenerator.getSQSClient;
 import static com.example.demo.AWSClientGenerator.getS3Client;
 import static com.example.demo.SQSOperations.receiveMessage;
 import static com.example.demo.SQSOperations.deleteMessage;
@@ -42,6 +39,7 @@ public class AutoScaler {
 			}
 		 return freeRunningEc2Ids;
 	 }
+	 
 	 public static void ScaleInOut()
 	 {
 		
