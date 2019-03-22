@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.concurrent.TimeUnit;
 
 import static com.example.demo.AutoScaler.ScaleInOut;
+import static com.example.demo.Common.getActualFileName;
 import static com.example.demo.Common.getEC2USerData;
-import static com.example.demo.Configuration.LOAD_BALANCER_TIMEOUT;
-import static com.example.demo.Configuration.RASBERRY_PIE_URL;
+import static com.example.demo.Configuration.*;
 import static com.example.demo.FileOperations.deleteTempFile;
 import static com.example.demo.FileOperations.downloadFile;
-import static com.example.demo.S3Operations.putFileInS3;
+import static com.example.demo.S3Operations.*;
 import static com.example.demo.SQSOperations.*;
 import static com.example.demo.SQSOperations.sendMessageToSQSQueue;
 
@@ -37,7 +37,18 @@ public class WebAppApplication {
                 deleteTempFile(fileName);
                 String queueUrl = getQueueUrl();
                 sendMessageToSQSQueue(queueUrl,fileName);
-                System.out.println("Queue Size is"+getSQSQueueSize());
+                fileName = getActualFileName(fileName);
+                String TMP = "i-04182e5430d459738";
+                String value =getValueFromKey(TMP);
+                System.out.println(value);
+                /*while(!existsInS3(filename)){
+                    try {
+                        TimeUnit.SECONDS.sleep(WEB_APP_TIMEOUT);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }*/
+
             }else{
                 System.out.println("New type of error:"+m);
             }

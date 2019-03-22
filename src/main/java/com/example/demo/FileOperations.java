@@ -59,7 +59,7 @@ public class FileOperations {
             // opens input stream from the HTTP connection
             InputStream inputStream = httpConn.getInputStream();
             String[] split = fileName.split("\\.");
-            System.out.println(split.length);
+
             fileName = split[0]+ "_"+ new Random().nextInt(1000)+ "."+split[1];
             String saveFilePath = saveDir + File.separator + fileName;
 

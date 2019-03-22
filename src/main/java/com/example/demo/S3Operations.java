@@ -60,6 +60,21 @@ public class S3Operations {
         return result;
     }
 
+    public static String getValueFromKey(String key)
+    {
+        String result = "Not Found";
+            AmazonS3 s3client = getS3Client();
+            if(existsInS3(key)){
+                S3Object fullObject = null;
+                fullObject = s3client.getObject(new GetObjectRequest(BUCKET_NAME, key));
+                fullObject.getObjectContent()
+                if(fullObject != null){
+                    result = fullObject.toString();
+                }
+            }
+        return result;
+    }
+
     
     /*public static getResultForInputFromS3(String){
 

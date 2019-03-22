@@ -19,4 +19,9 @@ public class Common {
         }
         return base64UserData;
     }
+    public static String getActualFileName(String fileName){
+        String[] split1 = fileName.split("\\.");
+        String[] split2 = split1[0].split("_");
+        return split2[0]+"."+split1[1];
+    }
 }
