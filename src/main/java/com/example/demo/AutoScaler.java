@@ -60,6 +60,10 @@ public class AutoScaler {
 		if (numberOfMsgs > 0 && numberOfMsgs > capacity && numOfAppEC2 < MAXIMUM_NO_OF_INSTANCES )
 		{
 			int num = numberOfMsgs - capacity;
+			if (num > MAXIMUM_NO_OF_INSTANCES )
+			{
+				num = MAXIMUM_NO_OF_INSTANCES;
+			}
 			System.out.println("Scale out");
     		int status = CreateInstance(IMAGE_ID, num);
     		for (int i=0;i<stoppedEC2Ids.size();i++)
@@ -84,7 +88,7 @@ public class AutoScaler {
 		}
 		int i = 0;
 		runningEC2Ids = getIdsOfFreeRunningInstances();
-		while(i< numberOfMsgs)
+		while(i< runningEC2Ids.size())
 		{
 			Message message = receiveMessage();
 			s3client.putObject(BUCKET_NAME, runningEC2Ids.get(i),message.getBody());

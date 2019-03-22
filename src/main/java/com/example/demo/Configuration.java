@@ -12,6 +12,6 @@ public  class Configuration {
     public static final int LOAD_BALANCER_TIMEOUT = 5;
     public static final int WEB_APP_TIMEOUT = 5;
     public static final int MINIMUM_NO_OF_INSTANCES = 2;
-    public static final int MAXIMUM_NO_OF_INSTANCES = 20;
+    public static final int MAXIMUM_NO_OF_INSTANCES = 19;
     public static final String IMAGE_ID = "ami-0e355297545de2f82";
 }
