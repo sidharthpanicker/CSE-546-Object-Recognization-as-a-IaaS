@@ -42,12 +42,13 @@ public class EC2Operations{
 		tagSpecifications.add(tagSpecification);
 		RunInstancesRequest rir = new RunInstancesRequest(imageId, mincount, maxcount);
 		rir.setInstanceType("t2.micro");
-		rir.setUserData(Common.getEC2USerData());
+		//rir.setUserData(Common.getEC2USerData());
 		rir.setTagSpecifications(tagSpecifications);
 		RunInstancesResult result = null;
 		try {
 			result = ec2.runInstances(rir);
 		} catch (AmazonEC2Exception amzEc2Exp) {
+			amzEc2Exp.printStackTrace();
 			return 0;
 		} catch (Exception e) {
 			return 0;
