@@ -23,7 +23,7 @@ public class WebAppApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(WebAppApplication.class, args);
-        runLoadBalancer();
+        //runLoadBalancer();
         //getEC2USerData();
 
     }
@@ -38,28 +38,19 @@ public class WebAppApplication {
                 String queueUrl = getQueueUrl();
                 sendMessageToSQSQueue(queueUrl,fileName);
                 fileName = getActualFileName(fileName);
-                String TMP = "i-04182e5430d459738";
-                String value =getValueFromKey(TMP);
-                System.out.println(value);
-                /*while(!existsInS3(filename)){
+                while(!existsInS3(fileName)){
                     try {
                         TimeUnit.SECONDS.sleep(WEB_APP_TIMEOUT);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                }*/
+                }
+                String result = getValueFromKey(fileName);
+                return result;
 
             }else{
                 System.out.println("New type of error:"+m);
             }
-            //TODO
-            //Query S3 with filename to return value
-
-           /* while(getSQSQueueSize()>0){
-                System.out.println("Queue Size is"+getSQSQueueSize());
-                getMessagesFromSQSQueue();
-            }*/
-
 
         } catch (Exception e) {
             e.printStackTrace();

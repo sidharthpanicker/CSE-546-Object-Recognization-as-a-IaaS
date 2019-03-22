@@ -6,10 +6,13 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
+
+import static com.example.demo.Common.getValueFromS3Object;
 import static com.example.demo.Configuration.BUCKET_NAME;
 import static com.example.demo.AWSClientGenerator.getS3Client;
 
 import java.io.File;
+import java.io.IOException;
 
 public class S3Operations {
     public static int putFileInS3(String fileName){
@@ -60,23 +63,16 @@ public class S3Operations {
         return result;
     }
 
-    public static String getValueFromKey(String key)
-    {
+    public static String getValueFromKey(String key) throws IOException {
         String result = "Not Found";
             AmazonS3 s3client = getS3Client();
             if(existsInS3(key)){
                 S3Object fullObject = null;
                 fullObject = s3client.getObject(new GetObjectRequest(BUCKET_NAME, key));
-                fullObject.getObjectContent()
                 if(fullObject != null){
-                    result = fullObject.toString();
+                    result =  getValueFromS3Object(fullObject.getObjectContent());
                 }
             }
         return result;
     }
-
-    
-    /*public static getResultForInputFromS3(String){
-
-    }*/
 }
