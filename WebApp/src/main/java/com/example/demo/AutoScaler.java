@@ -19,9 +19,7 @@ import static com.example.demo.SQSOperations.receiveMessage;
 import static com.example.demo.SQSOperations.deleteMessage;
 import static com.example.demo.S3Operations.existsInS3;
 public class AutoScaler {
-	 public static void main(String[] args) {
-		 ScaleInOut();	
-}
+
 	 public static List<String> getIdsOfFreeRunningInstances()
 	 {
 		// Calculates free running instances
