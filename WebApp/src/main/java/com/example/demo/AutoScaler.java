@@ -27,7 +27,7 @@ public class AutoScaler {
 		// Calculates free running instances
 		 List<String> runningInstances = getIdsOfRunningInstances();
 		 List<String> freeRunningEc2Ids = new ArrayList<String>();
-		 int numOfAppEC2 = runningInstances.size() -1;
+		 int numOfAppEC2 = runningInstances.size();
 		 for(int i=0;i<numOfAppEC2;i++)
 			{
 				String instanceId = runningInstances.get(i);
@@ -44,7 +44,7 @@ public class AutoScaler {
 
 		 List<String> runningEC2Ids = getIdsOfRunningInstances();
 		 List<String> stoppedEC2Ids = getIdsOfStoppedInstances();
-		 int numOfAppEC2 = runningEC2Ids.size() - 1;
+		 int numOfAppEC2 = runningEC2Ids.size();
 		 List<String> freeRunningEc2Ids = getIdsOfFreeRunningInstances();
 		 int capacity = freeRunningEc2Ids.size() + stoppedEC2Ids.size();
 
@@ -125,10 +125,10 @@ public class AutoScaler {
 				 System.out.println("Stop instances");
 				 stopInstance(freeRunningEc2Ids.get(i));
 			 }
-		 }
+		 	}
 		if(numberOfMsgs > 0 && numberOfMsgs < capacity){
 
-			 for (int i=0;i<numberOfMsgs;i++)
+			 for (int i=0;i<numberOfMsgs && i<stoppedEC2Ids.size();i++)
 			 {
 				 System.out.println("Starting instances");
 				 startInstance(stoppedEC2Ids.get(i));

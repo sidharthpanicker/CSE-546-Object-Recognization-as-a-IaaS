@@ -2,19 +2,7 @@ package com.example.demo;
 
 
 import com.amazonaws.services.ec2.AmazonEC2;
-import com.amazonaws.services.ec2.model.AmazonEC2Exception;
-import com.amazonaws.services.ec2.model.DescribeInstanceStatusRequest;
-import com.amazonaws.services.ec2.model.DescribeInstanceStatusResult;
-import com.amazonaws.services.ec2.model.RunInstancesRequest;
-import com.amazonaws.services.ec2.model.RunInstancesResult;
-import com.amazonaws.services.ec2.model.StartInstancesRequest;
-import com.amazonaws.services.ec2.model.StopInstancesRequest;
-import com.amazonaws.services.ec2.model.Tag;
-import com.amazonaws.services.ec2.model.TagSpecification;
-import com.amazonaws.services.ec2.model.TerminateInstancesRequest;
-import com.amazonaws.services.ec2.model.InstanceState;
-import com.amazonaws.services.ec2.model.InstanceStatus;
-import com.amazonaws.services.ec2.model.InstanceStateName;
+import com.amazonaws.services.ec2.model.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -97,38 +85,41 @@ public class EC2Operations{
 		ec2.terminateInstances(request);
 	}
 	public static List<String> getIdsOfRunningInstances() {
-		
-		AmazonEC2 ec2 = getEC2Client();
-		DescribeInstanceStatusRequest describeRequest = new DescribeInstanceStatusRequest();
-		describeRequest.setIncludeAllInstances(true);
-		DescribeInstanceStatusResult describeInstances = ec2.describeInstanceStatus(describeRequest);
-		List<InstanceStatus> instanceStatusList = describeInstances.getInstanceStatuses();
+
+		List<Instance> instances = getInstances();
 		List<String> runningInstanceIds = new ArrayList<String>();
-		for (InstanceStatus instanceStatus : instanceStatusList) {
-			InstanceState instanceState = instanceStatus.getInstanceState();
-			if (instanceState.getName().equals(InstanceStateName.Running.toString())) {
-				runningInstanceIds.add(instanceStatus.getInstanceId());
+		for (Instance instance : instances) {
+			if(instance.getState().getName().equals(InstanceStateName.Running.toString())){
+				runningInstanceIds.add(instance.getInstanceId());
 			}
 		}
 		
 		return runningInstanceIds;
 	}
 	public static List<String> getIdsOfStoppedInstances() {
-		
-		AmazonEC2 ec2 = getEC2Client();
-		DescribeInstanceStatusRequest describeRequest = new DescribeInstanceStatusRequest();
-		describeRequest.setIncludeAllInstances(true);
-		DescribeInstanceStatusResult describeInstances = ec2.describeInstanceStatus(describeRequest);
-		List<InstanceStatus> instanceStatusList = describeInstances.getInstanceStatuses();
+
+		List<Instance> instances = getInstances();
 		List<String> stoppedInstanceIds = new ArrayList<String>();
-		for (InstanceStatus instanceStatus : instanceStatusList) {
-			InstanceState instanceState = instanceStatus.getInstanceState();
-			if (instanceState.getName().equals(InstanceStateName.Stopped.toString())) {
-				stoppedInstanceIds.add(instanceStatus.getInstanceId());
+		for (Instance instance : instances) {
+			if(instance.getState().getName().equals(InstanceStateName.Stopped.toString())){
+				stoppedInstanceIds.add(instance.getInstanceId());
 			}
 		}
-		
+
 		return stoppedInstanceIds;
 	}
-	
+
+	private static List<Instance> getInstances() {
+		AmazonEC2 ec2 = getEC2Client();
+		DescribeInstancesRequest request = new DescribeInstancesRequest()
+				.withFilters(new Filter("tag:Name").withValues("App-Instance"));
+
+		DescribeInstancesResult result = ec2.describeInstances(request);
+		List<Instance> resultInstances = new ArrayList<>();
+		for (Reservation reservation : result.getReservations()) {
+			resultInstances.addAll(reservation.getInstances());
+		}
+		return resultInstances;
+	}
+
 }

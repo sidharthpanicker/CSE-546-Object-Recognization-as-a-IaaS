@@ -22,7 +22,8 @@ public class Common {
     public static String getActualFileName(String fileName){
         String[] split1 = fileName.split("\\.");
         String[] split2 = split1[0].split("_");
-        return split2[0]+"."+split1[1];
+        //return split2[0]+"."+split1[1];
+        return split2[0];
     }
     public static String getValueFromS3Object(InputStream input) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(input));

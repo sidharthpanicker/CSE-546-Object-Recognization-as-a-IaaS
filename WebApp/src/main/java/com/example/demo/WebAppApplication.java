@@ -28,7 +28,7 @@ public class WebAppApplication {
 
     }
 
-    @RequestMapping("/hello")
+    @RequestMapping("/runmodel")
     public String sayHello() {
         try {
             String fileName = downloadFile(RASBERRY_PIE_URL,".");
@@ -46,7 +46,7 @@ public class WebAppApplication {
                     }
                 }
                 String result = getValueFromKey(fileName);
-                return result;
+                return "("+fileName+","+result+")";
 
             }else{
                 System.out.println("New type of error:"+m);
