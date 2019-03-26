@@ -48,6 +48,7 @@ public class AutoScaler {
 
 		 System.out.println("Number of running ec2 " + runningEC2Ids.size() + "\n");
 		 System.out.println("Number of free running ec2 " + freeRunningEc2Ids.size() + "\n");
+		 System.out.println("Number of busy running ec2 " + (runningEC2Ids.size()-freeRunningEc2Ids.size()) + "\n");
 		 System.out.println("Number of stopped ec2 " + stoppedEC2Ids.size() + "\n");
 
 		 // Query the queue for number of messages
@@ -81,7 +82,7 @@ public class AutoScaler {
 			 */
 
 			// Scale Out
-		 	if(numberOfMsgs> 0 && numberOfMsgs> capacity)
+		 	if(numberOfMsgs> 0 && numberOfMsgs> capacity && numOfAppEC2 < MAXIMUM_NO_OF_INSTANCES)
 			{
 				if(numberOfMsgs > freeRunningEc2Ids.size())
 				{
