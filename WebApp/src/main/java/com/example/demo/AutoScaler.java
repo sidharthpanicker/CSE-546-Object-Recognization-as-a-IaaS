@@ -86,8 +86,8 @@ public class AutoScaler {
 				if(numberOfMsgs > freeRunningEc2Ids.size())
 				{
 					int num = numberOfMsgs - capacity;
-					if (num > MAXIMUM_NO_OF_INSTANCES) {
-						num = MAXIMUM_NO_OF_INSTANCES;
+					if (num > MAXIMUM_NO_OF_INSTANCES - numOfAppEC2) {
+						num = MAXIMUM_NO_OF_INSTANCES- numOfAppEC2;
 					}
 					System.out.println("Scale out");
 					System.out.println("Creating new Instances");
