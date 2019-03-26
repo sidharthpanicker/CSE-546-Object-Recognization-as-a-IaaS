@@ -45,11 +45,13 @@ public class AutoScaler {
 		 int numOfAppEC2 = runningEC2Ids.size();
 		 List<String> freeRunningEc2Ids = getIdsOfFreeRunningInstances();
 		 int capacity = freeRunningEc2Ids.size() + stoppedEC2Ids.size();
+		 int busyRunning = (runningEC2Ids.size()-freeRunningEc2Ids.size());
 
 		 System.out.println("Number of running ec2 " + runningEC2Ids.size() + "\n");
 		 System.out.println("Number of free running ec2 " + freeRunningEc2Ids.size() + "\n");
-		 System.out.println("Number of busy running ec2 " + (runningEC2Ids.size()-freeRunningEc2Ids.size()) + "\n");
+		 System.out.println("Number of busy running ec2 " + busyRunning + "\n");
 		 System.out.println("Number of stopped ec2 " + stoppedEC2Ids.size() + "\n");
+
 
 		 // Query the queue for number of messages
 		 AmazonS3 s3client = getS3Client();
@@ -87,12 +89,14 @@ public class AutoScaler {
 				if(numberOfMsgs > freeRunningEc2Ids.size())
 				{
 					int num = numberOfMsgs - capacity;
-					if (num > MAXIMUM_NO_OF_INSTANCES - capacity) {
-						num = MAXIMUM_NO_OF_INSTANCES- capacity;
+					if (num > MAXIMUM_NO_OF_INSTANCES - capacity - busyRunning) {
+						num = MAXIMUM_NO_OF_INSTANCES- capacity - busyRunning;
 					}
 					System.out.println("Scale out");
 					System.out.println("Creating new Instances " + num);
-					int status = CreateInstance(IMAGE_ID, num);
+					if(num > 0){
+						int status = CreateInstance(IMAGE_ID, num);
+					}
 					for (int i = 0; i < stoppedEC2Ids.size(); i++) {
 						System.out.println("Start Stopped instances");
 						startInstance(stoppedEC2Ids.get(i));
@@ -108,6 +112,7 @@ public class AutoScaler {
 					for (int i=0;i<startinstancenum;i++)
 					{
 						System.out.println("Start Stopped instances");
+						System.out.println("I value"+ i+"stoppedEC2Ids size"+stoppedEC2Ids.size());
 						startInstance(stoppedEC2Ids.get(i));
 					}
 				}
@@ -130,6 +135,7 @@ public class AutoScaler {
 			 for (int i=0;i<numberOfMsgs && i<stoppedEC2Ids.size();i++)
 			 {
 				 System.out.println("Starting instances");
+				 System.out.println("I value"+ i+"numofMessages"+numberOfMsgs+"stoppedEC2Ids size"+stoppedEC2Ids.size());
 				 startInstance(stoppedEC2Ids.get(i));
 			 }
 		 }

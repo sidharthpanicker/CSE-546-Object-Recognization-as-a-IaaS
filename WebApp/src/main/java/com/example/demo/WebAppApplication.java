@@ -61,8 +61,8 @@ public class WebAppApplication {
     public static void runLoadBalancer(){
         int i = 1;
         while(i>0){
-            ScaleInOut();
             try {
+                ScaleInOut();
                 TimeUnit.SECONDS.sleep(LOAD_BALANCER_TIMEOUT);
             } catch (InterruptedException e) {
                 e.printStackTrace();
