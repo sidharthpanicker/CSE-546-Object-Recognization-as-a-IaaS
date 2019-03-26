@@ -29,7 +29,7 @@ public class WebAppApplication {
     }
 
     @RequestMapping("/runmodel")
-    public String sayHello() {
+    public String runModel() {
         try {
             String fileName = downloadFile(RASBERRY_PIE_URL,".");
             int m = putFileInS3(fileName);
