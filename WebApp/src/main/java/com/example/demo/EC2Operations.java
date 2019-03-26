@@ -13,6 +13,7 @@ public class EC2Operations{
 	
     public static int CreateInstance(String imageId, Integer maxNumberOfInstances)
     {
+
     	AmazonEC2 ec2 = getEC2Client();
 		int mincount = maxNumberOfInstances - 1; // create 1 instance
 		int maxcount = maxNumberOfInstances;

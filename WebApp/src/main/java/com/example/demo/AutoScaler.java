@@ -87,11 +87,11 @@ public class AutoScaler {
 				if(numberOfMsgs > freeRunningEc2Ids.size())
 				{
 					int num = numberOfMsgs - capacity;
-					if (num > MAXIMUM_NO_OF_INSTANCES - numOfAppEC2) {
-						num = MAXIMUM_NO_OF_INSTANCES- numOfAppEC2;
+					if (num > MAXIMUM_NO_OF_INSTANCES - capacity) {
+						num = MAXIMUM_NO_OF_INSTANCES- capacity;
 					}
 					System.out.println("Scale out");
-					System.out.println("Creating new Instances");
+					System.out.println("Creating new Instances " + num);
 					int status = CreateInstance(IMAGE_ID, num);
 					for (int i = 0; i < stoppedEC2Ids.size(); i++) {
 						System.out.println("Start Stopped instances");
