@@ -30,7 +30,7 @@ public class EC2Operations{
 		tagSpecification.setTags(tags);
 		tagSpecifications.add(tagSpecification);
 		RunInstancesRequest rir = new RunInstancesRequest(imageId, mincount, maxcount);
-		rir.setInstanceType("t2.micro");
+		rir.setInstanceType("t2.medium");
 		//rir.setUserData(Common.getEC2USerData());
 		rir.setTagSpecifications(tagSpecifications);
 		RunInstancesResult result = null;

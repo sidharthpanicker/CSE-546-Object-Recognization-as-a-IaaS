@@ -64,7 +64,7 @@ public class WebAppApplication {
             try {
                 ScaleInOut();
                 TimeUnit.SECONDS.sleep(LOAD_BALANCER_TIMEOUT);
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

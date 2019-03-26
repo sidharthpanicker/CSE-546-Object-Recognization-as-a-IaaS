@@ -130,7 +130,7 @@ public class AutoScaler {
 				 stopInstance(freeRunningEc2Ids.get(i));
 			 }
 		 	}
-		if(numberOfMsgs > 0 && numberOfMsgs < capacity){
+		if(numberOfMsgs > 0 && numberOfMsgs < capacity && numberOfMsgs > freeRunningEc2Ids.size()){
 
 			 for (int i=0;i<numberOfMsgs && i<stoppedEC2Ids.size();i++)
 			 {
