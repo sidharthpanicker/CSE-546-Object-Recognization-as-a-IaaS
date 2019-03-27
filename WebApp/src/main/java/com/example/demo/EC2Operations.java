@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.example.demo.AWSClientGenerator.getEC2Client;
+import static com.example.demo.Common.printToTheRequiredStream;
+
 public class EC2Operations{
 	
     public static int CreateInstance(String imageId, Integer maxNumberOfInstances)
@@ -49,7 +51,7 @@ public class EC2Operations{
     	List<String> stoppedEC2Ids = getIdsOfStoppedInstances();
     	if (maxNumberOfInstances <= stoppedEC2Ids.size())
     	{
-    		System.out.println("Starting instances");
+			printToTheRequiredStream("Starting instances");
     		for (int i=0;i<maxNumberOfInstances;i++)
     		{
     			startInstance(stoppedEC2Ids.get(i));
@@ -58,7 +60,7 @@ public class EC2Operations{
     	}
     	if (maxNumberOfInstances > stoppedEC2Ids.size())
     	{
-    		System.out.println("Starting instances");
+			printToTheRequiredStream("Starting instances");
     		for (int i=0;i<stoppedEC2Ids.size();i++)
     		{
     			startInstance(stoppedEC2Ids.get(i));

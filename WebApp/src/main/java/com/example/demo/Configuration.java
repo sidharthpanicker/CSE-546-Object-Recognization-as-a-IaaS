@@ -29,5 +29,6 @@ public  class Configuration {
     public static final int MINIMUM_NO_OF_INSTANCES = 2;
     public static final int MAXIMUM_NO_OF_INSTANCES = 19;
     public static final String IMAGE_ID = "ami-0ddb68049885e82e7";
+    public static final Boolean WRITE_TO_CONSOLE = true;
     //public static final String IMAGE_ID = "ami-0a8da0772a5f43939";
 }

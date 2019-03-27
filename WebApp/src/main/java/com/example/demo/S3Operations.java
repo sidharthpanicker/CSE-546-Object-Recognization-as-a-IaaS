@@ -8,6 +8,7 @@ import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
 
 import static com.example.demo.Common.getValueFromS3Object;
+import static com.example.demo.Common.printToTheRequiredStream;
 import static com.example.demo.Configuration.BUCKET_NAME;
 import static com.example.demo.AWSClientGenerator.getS3Client;
 
@@ -17,7 +18,7 @@ import java.io.IOException;
 public class S3Operations {
     public static int putFileInS3(String fileName){
         int result = 0;
-        System.out.println("putFileInS3 started with file Name:" + fileName);
+        printToTheRequiredStream("putFileInS3 started with file Name:" + fileName);
         AmazonS3 s3client = AWSClientGenerator.getS3Client();
         try{
             PutObjectResult tmp = s3client.putObject(
@@ -25,13 +26,13 @@ public class S3Operations {
                     fileName,
                     new File("."+File.separator + fileName)
             );
-            System.out.println("Completed Uploading");
+            printToTheRequiredStream("Completed Uploading");
             result = 1;
         }catch(AmazonS3Exception e){
             String CONTENT_MD5 = "Content-MD5";
-            System.out.println("Error in:" + fileName);
+            printToTheRequiredStream("Error in:" + fileName);
             if(e.getMessage().contains(CONTENT_MD5)){
-                System.out.println("Duplicate File Found");
+                printToTheRequiredStream("Duplicate File Found");
                 result = 2;
             }else{
                 result = 0;
@@ -40,7 +41,7 @@ public class S3Operations {
 
         }
         catch(Exception e){
-            System.out.println("Error in:" + fileName);
+            printToTheRequiredStream("Error in:" + fileName);
             e.printStackTrace();
             result = 0;
         }

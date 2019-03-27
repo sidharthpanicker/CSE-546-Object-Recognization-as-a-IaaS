@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.concurrent.TimeUnit;
 
 import static com.example.demo.AutoScaler.ScaleInOut;
-import static com.example.demo.Common.getActualFileName;
-import static com.example.demo.Common.getEC2USerData;
+import static com.example.demo.Common.*;
 import static com.example.demo.Configuration.*;
 import static com.example.demo.FileOperations.deleteTempFile;
 import static com.example.demo.FileOperations.downloadFile;
@@ -49,7 +48,7 @@ public class WebAppApplication {
                 return "("+fileName+","+result+")";
 
             }else{
-                System.out.println("New type of error:"+m);
+                printToTheRequiredStream("New type of error:"+m);
             }
 
         } catch (Exception e) {

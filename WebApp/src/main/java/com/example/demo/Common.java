@@ -4,6 +4,8 @@ import org.apache.commons.codec.binary.Base64;
 
 import java.io.*;
 
+import static com.example.demo.Configuration.WRITE_TO_CONSOLE;
+
 public class Common {
     public static String getEC2USerData() {
         String userData = "";
@@ -29,5 +31,25 @@ public class Common {
         BufferedReader reader = new BufferedReader(new InputStreamReader(input));
         String line = reader.readLine();
         return line;
+    }
+
+    public static void printToTheRequiredStream(String input) {
+        if(!WRITE_TO_CONSOLE){
+            File file = new File("Output.txt");
+            try {
+                if (file.createNewFile()) {
+
+                    System.out.println("File has been created.");
+                }
+                PrintStream o = new PrintStream(new File("Output.txt"));
+                System.setOut(o);
+                System.out.println(input);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }else{
+            System.out.println(input);
+        }
     }
 }

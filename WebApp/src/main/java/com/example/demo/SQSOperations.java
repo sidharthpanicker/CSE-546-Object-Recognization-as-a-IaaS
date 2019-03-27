@@ -9,13 +9,14 @@ import java.util.List;
 import java.util.Map;
 
 import static com.example.demo.AWSClientGenerator.getSQSClient;
+import static com.example.demo.Common.printToTheRequiredStream;
 import static com.example.demo.Configuration.QUEUE_NAME;
 
 public class SQSOperations {
 
     public static void sendMessageToSQSQueue(String queueUrl,String videoName){
         AmazonSQS sqs = getSQSClient();
-        System.out.println("Sending a message to fifo.\n");
+        printToTheRequiredStream("Sending a message to fifo.\n");
         final SendMessageRequest sendMessageRequest = new SendMessageRequest(queueUrl, videoName);
 
         // When you send messages to a FIFO queue, you must provide a non-empty MessageGroupId.
@@ -32,7 +33,7 @@ public class SQSOperations {
         final SendMessageResult sendMessageResult = sqs.sendMessage(sendMessageRequest);
         final String sequenceNumber = sendMessageResult.getSequenceNumber();
         final String messageId = sendMessageResult.getMessageId();
-        System.out.println("SendMessage succeed with messageId " + messageId + ", sequence number " + sequenceNumber
+        printToTheRequiredStream("SendMessage succeed with messageId " + messageId + ", sequence number " + sequenceNumber
                 + "\n");
 
     }
@@ -51,7 +52,7 @@ public class SQSOperations {
     public static String createSQSQueue(){
         // Create a FIFO queue
         AmazonSQS sqs = getSQSClient();
-        System.out.println("Creating a new Amazon SQS FIFO queue called " + QUEUE_NAME+"\n");
+        printToTheRequiredStream("Creating a new Amazon SQS FIFO queue called " + QUEUE_NAME+"\n");
         final Map<String, String> attributes = new HashMap<String, String>();
 
         // A FIFO queue must have the FifoQueue attribute set to True
@@ -69,10 +70,10 @@ public class SQSOperations {
 
     public static void getMessagesFromSQSQueue(){
         AmazonSQS sqs = getSQSClient();
-        System.out.println("Receiving messages from MyQueue.\n");
+        printToTheRequiredStream("Receiving messages from MyQueue.\n");
         final ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(getQueueUrl());
         final List<Message> messages = sqs.receiveMessage(receiveMessageRequest).getMessages();
-        System.out.println("Size is:"+messages.size());
+        printToTheRequiredStream("Size is:"+messages.size());
         for (final Message message : messages) {
             System.out.println("Message");
             System.out.println("  MessageId:     " + message.getMessageId());
