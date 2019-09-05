@@ -11,8 +11,8 @@ The functionality of an AppInstance is captured in the AMI ami-0ddb68049885e82e7
 Credentials for Running the application:
 Request URL: http://13.52.144.193:8080/runmodel
 
-ACCESS_KEY = AKIAI7LTFYPHDGK7NSUA
+ACCESS_KEY = XX
 
-SECRET_KEY = KJTIIlli57/FfxqDEupe4Y9BMp0q72TbT0EX9+14
+SECRET_KEY = XX
 
 S3 Bucket Name = cloud-iaas-project
